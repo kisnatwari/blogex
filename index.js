@@ -2,19 +2,15 @@ const express = require("express");
 const server = express();
 server.listen(8080);
 
-//Enable cors policy
-const cors = require("cors");
-server.use(cors());
+const cors = require("./middleware/cors.middleware");
+const bodyparser = require("./middleware/bodyparser.middleware");
+const multer = require("./middleware/multer.middleware");
 
-//recieve body text
-const body = require("body-parser");
-const urlEncoder = body.urlencoded({ extended: false });
-const jsonEncoder = body.json();
-const multer = require("multer");
-const multipart = multer().single("image");
-//server.use(urlEncoder);
-//server.use(jsonEncoder);
-server.use(multipart);
+//middleware
+server.use(cors);
+server.use(bodyparser.jsonEncoder);
+server.use(bodyparser.jsonEncoder);
+server.use(bodyparser.multer);
 
 //require routing
 const blogRouting = require("./routing/blog.routing");
