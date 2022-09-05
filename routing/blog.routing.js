@@ -7,7 +7,7 @@ router.get("/", (request, response) => {
 })
 
 router.post("/", (request, response) => {
-    blogController.uploadFile(request, response);
+    blogController.createBlog(request, response);
 })
 
 router.put("/", (request, response) => {

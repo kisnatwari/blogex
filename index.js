@@ -10,7 +10,7 @@ const multer = require("./middleware/multer.middleware");
 server.use(cors);
 server.use(bodyparser.jsonEncoder);
 server.use(bodyparser.jsonEncoder);
-server.use(bodyparser.multer);
+server.use(multer);
 
 //require routing
 const blogRouting = require("./routing/blog.routing");

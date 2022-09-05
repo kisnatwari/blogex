@@ -1,9 +1,19 @@
-const uploadFile = (request, response) => {
-    response.json({
-        textData: request.body,
-        fileData: request.file
-    })
+const db = require("../database/db");
+
+const createBlog = async (request, response) => {
+    const data = request.body;
+    const fileInfo = request.file;
+    data['image'] = fileInfo.destination + "/" + fileInfo.filename;
+    try {
+        const dataRes = database.createData(data);
+        response.status(200);
+        response.json(dataRes);
+    }
+    catch (error) {
+        response.status(409);
+        response.json(error);
+    }
 }
 
 
-module.exports = { uploadFile: uploadFile };
+module.exports = { createBlog: createBlog };
