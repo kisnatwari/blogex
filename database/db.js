@@ -9,6 +9,18 @@ const createData = async (data) => {
     return dataRes;
 }
 
+const getAll = async () => {
+    const data = await blogSchema.find();
+    return data;
+}
+
+const getByQuery = async (query) => {
+    const data = await blogSchema.find(query);
+    return data;
+}
+
 module.exports = {
-    createData: createData
+    createData: createData,
+    getAll: getAll,
+    getByQuery: getByQuery
 }

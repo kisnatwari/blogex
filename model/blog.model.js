@@ -4,9 +4,11 @@ const blogSchema = new Schema({
     title: {
         type: String,
         unique: [true, "Title Already Exists"],
-        required: [true, "Title is missing"]
+        required: [true, "Title is missing !!"]
     },
+    category: String,
     image: String,
+    category: String,
     content: {
         type: String,
         required: [true, "Content is missing !!"]

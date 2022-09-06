@@ -3,7 +3,11 @@ const router = express.Router();
 const blogController = require("../controller/blog.controller.js");
 
 router.get("/", (request, response) => {
-    response.send("Get Request");
+    blogController.getAllBlogs(request, response);
+})
+
+router.get("/:category", (request, response) => {
+    blogController.getBlogsByCategory(request, response);
 })
 
 router.post("/", (request, response) => {
