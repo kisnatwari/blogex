@@ -16,4 +16,5 @@ server.use(multer);
 const blogRouting = require("./routing/blog.routing");
 
 // middleware route
+server.use("/storage", express.static(__dirname + "/storage"))
 server.use("/blog", blogRouting);

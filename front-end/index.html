@@ -12,45 +12,66 @@
         .set-error {
             border: solid red 1px !important;
         }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
     </style>
 </head>
 
 <body class="bg-light">
 
-    <div class="container-fluid p-5 bg-primary text-white text-center">
-        <h1>Explore The Best Out Of Blogging</h1>
+    <div class="container-fluid p-3 bg-primary text-white text-center">
+        <h2>Explore The Best Out Of Blogging</h2>
         <p>Number 1 Blogging platform available in the whole internet</p>
     </div>
 
     <div class="container mt-5">
-        <form class="shadow p-3 bg-white mx-auto" id="blog-form" style="max-width: 500px;" enctype="multipart/form-data">
-            <h3 class="text-dark">Create a new Blog</h3>
-            <div class="form-group mb-3">
-                <label for="title">Title of a blog</label>
-                <input type="text" class="form-control title" name="title">
-                <p class="title-error text-danger"></p>
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Home</button>
+                <button class="nav-link" id="nav-technology-tab" data-bs-toggle="tab" data-bs-target="#nav-technology" type="button" role="tab" aria-controls="nav-technology" aria-selected="false" onclick='blog(`http://localhost:8080/blog/Technology`, `#nav-technology`)''>Technology</button>
+                <button class="nav-link" id="nav-education-tab" data-bs-toggle="tab" data-bs-target="#nav-education" type="button" role="tab" aria-controls="nav-education" aria-selected="false" onclick=' blog(`http://localhost:8080/blog/Education`, `#nav-education`)''>Education</button>
+                <button class="nav-link" id="nav-add-tab" data-bs-toggle="tab" data-bs-target="#nav-add" type="button" role="tab" aria-controls="nav-add" aria-selected="false">Add</button>
             </div>
-            <div class="form-group mb-3">
-                <label for="category">Category</label>
-                <select name="category" id="category" class="form-control category">
-                    <option>Technical</option>
-                    <option>Education</option>
-                </select>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+
             </div>
-            <div class="form-group mb-3">
-                <label for="image">Post an Image</label>
-                <input id="image" type="file" accept="image/*" class="form-control image" name="image">
-                <p class="image-error text-danger"></p>
+            <div class="tab-pane fade" id="nav-technology" role="tabpanel" aria-labelledby="nav-technology-tab" tabindex="0">...</div>
+            <div class="tab-pane fade" id="nav-education" role="tabpanel" aria-labelledby="nav-education-tab" tabindex="0">...</div>
+            <div class="tab-pane fade" id="nav-add" role="tabpanel" aria-labelledby="nav-add-tab" tabindex="0">
+                <form class="shadow p-3 my-5 bg-white mx-auto" id="blog-form" style="max-width: 500px;" enctype="multipart/form-data">
+                    <h3 class="text-dark">Create a new Blog</h3>
+                    <div class="form-group mb-3">
+                        <label for="title">Title of a blog</label>
+                        <input type="text" class="form-control title" name="title">
+                        <p class="title-error text-danger"></p>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="category">Category</label>
+                        <select name="category" id="category" class="form-control category">
+                            <option>Technology</option>
+                            <option>Education</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="image">Post an Image</label>
+                        <input id="image" type="file" accept="image/*" class="form-control image" name="image">
+                        <p class="image-error text-danger"></p>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="content">Write A Description</label>
+                        <textarea id="content" style="resize: none;" class="form-control content" name="content" rows="4"></textarea>
+                        <p class="content-error text-danger"></p>
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Create A Post</button>
+                    </div>
+                </form>
             </div>
-            <div class="form-group mb-3">
-                <label for="content">Write A Description</label>
-                <textarea id="content" style="resize: none;" class="form-control content" name="content" rows="4"></textarea>
-                <p class="content-error text-danger"></p>
-            </div>
-            <div class="text-end">
-                <button type="submit" class="btn btn-primary">Create A Post</button>
-            </div>
-        </form>
+        </div>
     </div>
     <script>
         $(document).ready(() => {
@@ -87,6 +108,47 @@
                 })
             })
         })
+
+        $(document).ready(() => {
+            const url = "http://localhost:8080/blog";
+            blog(url, "#nav-home");
+        })
+
+        const blog = (url, element) => {
+            $.ajax({
+                type: "GET",
+                url: url,
+                beforeSend: () => {
+                    $(element).html("");
+                },
+                success: (response) => {
+                    console.log(response);
+                    response.forEach((data) => {
+                        const blogData = `
+                        <div class="blog bg-white shadow-sm border p-3 my-3">
+                            <small>${data.category} </small>
+                            <p class="display-6 p-0 m-0" style="font-size: 30px;">${data.title}</p>
+                            <p class="p-0 m-0" style="font-size: 20px;"> ${formatDate(data.createdAt)} </p>
+
+                            <img src="http://localhost:8080/${data.image}" style="max-height: 300px; width: 100%; object-fit: cover;">
+                            <p style="font-size: 16px; text-align: justify;" class="pt-3">
+                                ${data.content}
+                            </p>
+                        </div>`;
+
+                        $(element).append(blogData);
+                    })
+                }
+            })
+        }
+
+        function formatDate(date) {
+            date = new Date(date);
+            var dd = date.getDate();
+            var mm = date.getMonth() + 1;
+            var yyyy = date.getFullYear();
+            return yyyy + "-" + mm + "-" + dd + " <span style=' font-size: 15px'>" + date.toLocaleTimeString() + "</span>";
+        }
     </script>
 </body>
 
